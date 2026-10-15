@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; media-src 'self' file: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'">
+  <title>番茄钟 · Moyi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <!-- 顶部拖动区域 -->
+    <header class="titlebar">
+      <div class="titlebar-left">
+        <img src="avatar.png" alt="莫弈" class="avatar" id="avatar"
+             title="莫弈"
+             onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%234A8B7A%22/><text x=%2220%22 y=%2227%22 text-anchor=%22middle%22 fill=%22%23E8F0EC%22 font-size=%2218%22 font-family=%22sans-serif%22>弈</text></svg>'">
+        <div class="tabs">
+          <button class="tab active" data-mode="focus">专注</button>
+          <button class="tab" data-mode="short">短休</button>
+          <button class="tab" data-mode="long">长休</button>
+        </div>
+      </div>
+      <div class="win-controls">
+        <button class="ctrl" id="btn-import" title="导入日志">📥</button>
+        <button class="ctrl" id="btn-export" title="导出日志">📤</button>
+        <button class="ctrl" id="btn-music" title="音乐库">🎵</button>
+        <button class="ctrl" id="btn-settings" title="设置">⚙</button>
+        <button class="ctrl" id="btn-pin" title="置顶">📌</button>
+        <button class="ctrl" id="btn-hide" title="隐藏到托盘">—</button>
+        <button class="ctrl danger" id="btn-close" title="退出">×</button>
+      </div>
+    </header>
+
+    <!-- 圆环计时 -->
+    <div class="ring-wrap">
+      <svg class="ring" viewBox="0 0 160 160">
+        <circle class="ring-bg" cx="80" cy="80" r="68"/>
+        <circle class="ring-progress" id="ring" cx="80" cy="80" r="68"/>
+      </svg>
+      <div class="ring-text">
+        <div class="time" id="time">25:00</div>
+        <div class="label" id="label">准备开始</div>
+      </div>
+    </div>
+
+    <!-- 控制按钮 -->
+    <div class="controls">
+      <button class="btn ghost" id="btn-reset" title="重置 (R)">↺</button>
+      <button class="btn primary" id="btn-main" title="开始/暂停 (空格)">开始</button>
+      <button class="btn ghost" id="btn-skip" title="跳过 (S)">⏭</button>
+    </div>
+
+    <!-- 语录区 -->
+    <div class="quote" id="quote" title="">
+      <div class="quote-text" id="quote-text">加载中…</div>
+      <button class="quote-btn" id="quote-toggle" title="暂停/继续自动切换">⏸</button>
+      <button class="quote-btn" id="quote-next" title="下一句">↻</button>
+    </div>
+
+    <!-- 底部状态 -->
+    <div class="footer">
+      <span id="stat">🍅 0 · 0 分</span>
+      <span id="music-name" class="music-name" title=""></span>
+    </div>
+
+    <!-- 音乐库面板 -->
+    <div class="music-panel" id="music-panel">
+      <div class="music-panel-header">
+        <span class="music-panel-title">🎵 音乐库</span>
+        <button class="music-panel-add" id="music-add" title="添加音乐">+</button>
+      </div>
+      <div class="music-list" id="music-list"></div>
+    </div>
+
+    <!-- 设置面板 -->
+    <div class="settings-panel" id="settings-panel">
+      <div class="settings-header">
+        <span class="settings-title">⚙ 设置</span>
+        <button class="settings-close" id="settings-close" title="关闭">×</button>
+      </div>
+      <div class="settings-body">
+        <div class="settings-row">
+          <label>专注时长</label>
+          <div class="settings-input">
+            <input type="number" id="set-focus" min="1" max="180" value="25">
+            <span>分</span>
+          </div>
+        </div>
+        <div class="settings-row">
+          <label>短休时长</label>
+          <div class="settings-input">
+            <input type="number" id="set-short" min="1" max="60" value="5">
+            <span>分</span>
+          </div>
+        </div>
+        <div class="settings-row">
+          <label>长休时长</label>
+          <div class="settings-input">
+            <input type="number" id="set-long" min="1" max="120" value="15">
+            <span>分</span>
+          </div>
+        </div>
+        <div class="settings-row">
+          <label>长休间隔</label>
+          <div class="settings-input">
+            <input type="number" id="set-interval" min="2" max="12" value="4">
+            <span>个</span>
+          </div>
+        </div>
+      </div>
+      <div class="settings-footer">
+        <button class="settings-btn" id="settings-reset">恢复默认</button>
+        <button class="settings-btn primary" id="settings-save">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgm" loop></audio>
+
+  <script src="quotes.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
